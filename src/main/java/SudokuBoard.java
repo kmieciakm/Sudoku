@@ -6,26 +6,21 @@ import java.util.List;
 
 public class SudokuBoard {
 
-    static final int boardDimension = 9;
+    public static final int boardDimension = 9;
 
     private int[][] board = new int[boardDimension][boardDimension];
 
     /**
-     *  Returns Sudoku board.
+     *  Returns Sudoku board copy.
      *
-     * @return Board
+     * @return Copy of the board
      */
     public int[][] getBoard() {
-        return board;
-    }
-
-    /**
-     *  Sets Sudoku board.
-     *
-     * @param newBoard The board to be updated
-     */
-    public void setBoard(int[][] newBoard) {
-        board = newBoard;
+        int[][] boardCopy = new int[board.length][];
+        for (int i = 0; i < board.length; i++) {
+            boardCopy[i] = board[i].clone();
+        }
+        return boardCopy;
     }
 
     /**
@@ -69,9 +64,7 @@ public class SudokuBoard {
 
         for (int numberIndex = 0; numberIndex < boardDimension; numberIndex++) {
             board[emptyFiledX][emptyFiledY] = numbers.get(numberIndex);
-            if (isValidRow(emptyFiledX)
-                    && isValidColumn(emptyFiledY)
-                    && isValidBox(emptyFiledX, emptyFiledY)) {
+            if (isLayoutAllowed(emptyFiledX, emptyFiledY)) {
                 if (fillBoard()) {
                     return true;
                 }
@@ -139,13 +132,25 @@ public class SudokuBoard {
     }
 
     /**
+     *  Check if current inserted numbers to board follows the rules.
+     *
+     * @return Boolean that specifies correctness of board
+     */
+    private boolean isLayoutAllowed(int rowId, int columnId) {
+        if (isValidRow(rowId) && isValidColumn(columnId) && isValidBox(rowId, columnId)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      *  Check if specific column in Sudoku board is valid, ignore all 0's.
      *
      * @param columnId  The number of column in board to check (starts from 0)
      * @return Boolean that specifies correctness of column
      * @throws IndexOutOfBoundsException When param not in range
      */
-    public boolean isValidColumn(int columnId) {
+    private boolean isValidColumn(int columnId) {
         if (columnId >= boardDimension || columnId < 0) {
             throw new IndexOutOfBoundsException("ColumnId: " + columnId + " not allowed");
         }
@@ -173,7 +178,7 @@ public class SudokuBoard {
      * @return Boolean that specifies correctness of row
      * @throws IndexOutOfBoundsException When param not in range
      */
-    public boolean isValidRow(int rowId) {
+    private boolean isValidRow(int rowId) {
         if (rowId >= boardDimension || rowId < 0) {
             throw new IndexOutOfBoundsException("ColumnId: " + rowId + " not allowed");
         }
@@ -202,7 +207,7 @@ public class SudokuBoard {
      * @return Boolean that specifies correctness of box
      * @throws IndexOutOfBoundsException When param not in range
      */
-    public boolean isValidBox(int rowId, int columnId) {
+    private boolean isValidBox(int rowId, int columnId) {
         if (rowId >= boardDimension || rowId < 0) {
             throw new IndexOutOfBoundsException("RowId: " + rowId + " not allowed");
         }
@@ -231,4 +236,29 @@ public class SudokuBoard {
         return true;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        SudokuBoard objBoard = (SudokuBoard) obj;
+
+        for (int rowId = 0; rowId < board.length; rowId++) {
+            for (int columnId = 0; columnId < board[rowId].length; columnId++) {
+                if (board[rowId][columnId] != objBoard.getBoard()[rowId][columnId]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
