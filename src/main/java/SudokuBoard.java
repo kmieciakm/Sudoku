@@ -1,14 +1,11 @@
 import java.lang.Math;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class SudokuBoard {
 
     public static final int boardDimension = 9;
-
     private int[][] board = new int[boardDimension][boardDimension];
+    private SudokuSolver sudokuSolver;
 
     /**
      *  Returns Sudoku board copy.
@@ -31,10 +28,13 @@ public class SudokuBoard {
         return board[x][y];
     }
 
-    public int solveGame() {
-        return 0;
+    public void solveGame() {
+        sudokuSolver.solve(this);
     }
 
+    SudokuBoard(SudokuSolver solver) {
+        sudokuSolver = solver;
+    }
 
     /**
      *  Check if Sudoku board follows the rules, is correctly solved.
@@ -90,7 +90,6 @@ public class SudokuBoard {
 
         return true;
     }
-
 
     /**
      *  Check if current inserted numbers to board follows the rules.
