@@ -23,58 +23,18 @@ public class SudokuBoard {
         return boardCopy;
     }
 
-    /**
-     *  Generate Sudoku board.
-     *
-     * @return Boolean that specifies if board is fully filled
-     */
-    public boolean fillBoard() {
-        int emptyFiledX = -1;
-        int emptyFiledY = -1;
-        boolean isEmpty = true;
-
-        outerloop: for (int x = 0; x < boardDimension; x++) {
-            for (int y = 0; y < boardDimension; y++) {
-                if (board[x][y] == 0) {
-                    emptyFiledX = x;
-                    emptyFiledY = y;
-                    isEmpty = false;
-                    break outerloop;
-                }
-            }
-        }
-
-        // no empty space left
-        if (isEmpty) {
-            return true;
-        }
-
-        List<Integer> numbers = new ArrayList<Integer>() {{
-            add(1);
-            add(2);
-            add(3);
-            add(4);
-            add(5);
-            add(6);
-            add(7);
-            add(8);
-            add(9);
-        }};
-        Collections.shuffle(numbers);
-
-        for (int numberIndex = 0; numberIndex < boardDimension; numberIndex++) {
-            board[emptyFiledX][emptyFiledY] = numbers.get(numberIndex);
-            if (isLayoutAllowed(emptyFiledX, emptyFiledY)) {
-                if (fillBoard()) {
-                    return true;
-                }
-            } else {
-                board[emptyFiledX][emptyFiledY] = 0;
-            }
-        }
-
-        return false;
+    public void set(int x, int y, int value) {
+        board[x][y] = value;
     }
+
+    public int get(int x, int y) {
+        return board[x][y];
+    }
+
+    public int solveGame() {
+        return 0;
+    }
+
 
     /**
      *  Check if Sudoku board follows the rules, is correctly solved.
@@ -131,12 +91,15 @@ public class SudokuBoard {
         return true;
     }
 
+
     /**
      *  Check if current inserted numbers to board follows the rules.
      *
+     * @param rowId index of a row
+     * @param columnId index of a column
      * @return Boolean that specifies correctness of board
      */
-    private boolean isLayoutAllowed(int rowId, int columnId) {
+    public boolean isLayoutAllowed(int rowId, int columnId) {
         if (isValidRow(rowId) && isValidColumn(columnId) && isValidBox(rowId, columnId)) {
             return true;
         }
