@@ -14,8 +14,8 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
         boolean isEmpty = true;
 
         outerloop:
-        for (int x = 0; x < SudokuBoard.boardDimension; x++) {
-            for (int y = 0; y < SudokuBoard.boardDimension; y++) {
+        for (int x = 0; x < SudokuBoard.sudokuDimension; x++) {
+            for (int y = 0; y < SudokuBoard.sudokuDimension; y++) {
                 if (board.get(x, y) == 0) {
                     emptyFiledX = x;
                     emptyFiledY = y;
@@ -43,7 +43,7 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
         }};
         Collections.shuffle(numbers);
 
-        for (int numberIndex = 0; numberIndex < SudokuBoard.boardDimension; numberIndex++) {
+        for (int numberIndex = 0; numberIndex < SudokuBoard.sudokuDimension; numberIndex++) {
             board.set(emptyFiledX, emptyFiledY, numbers.get(numberIndex));
             if (board.isLayoutAllowed(emptyFiledX, emptyFiledY)) {
                 if (fillBoard(board)) {

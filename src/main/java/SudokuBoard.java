@@ -1,19 +1,24 @@
 import java.lang.Math;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class SudokuBoard {
 
-    public static final int boardDimension = 9;
-    private int[][] board = new int[boardDimension][boardDimension];
+    public static final int sudokuDimension = 9;
+    private SudokuField[][] board = new SudokuField[sudokuDimension][sudokuDimension];
     private SudokuSolver sudokuSolver;
 
+    SudokuBoard(){
+        Arrays.fill(board, new SudokuField());
+    };
     /**
      *  Returns Sudoku board copy.
      *
      * @return Copy of the board
      */
-    public int[][] getBoard() {
-        int[][] boardCopy = new int[board.length][];
+    public SudokuField[][] getBoard() {
+        SudokuField[][] boardCopy = new SudokuField[board.length][];
         for (int i = 0; i < board.length; i++) {
             boardCopy[i] = board[i].clone();
         }
@@ -21,11 +26,11 @@ public class SudokuBoard {
     }
 
     public void set(int x, int y, int value) {
-        board[x][y] = value;
+        board[x][y].setFieldValue(value);
     }
 
     public int get(int x, int y) {
-        return board[x][y];
+        return board[x][y].getFieldValue();
     }
 
     public void solveGame() {
@@ -36,19 +41,49 @@ public class SudokuBoard {
         sudokuSolver = solver;
     }
 
+    SudokuRow getRow(int y) {
+        SudokuField[] row = board[y].clone();
+        return new SudokuRow(row);
+    }
+
+    SudokuColumn getColumn(int x) {
+        SudokuField[] column = new SudokuField[sudokuDimension];
+        for(int i = 0; i < sudokuDimension; i++){
+            column[i] = board[i][x];
+        }
+        return new SudokuColumn(column);
+    }
+
+    SudokuBox getBox(int x, int y) {
+        int squareSize = 3;
+        int xboundary = (int) Math.floor(x / squareSize) * squareSize;
+        int yboundary = (int) Math.floor(y / squareSize) * squareSize;
+        List<SudokuField> box = new ArrayList<SudokuField>();
+
+
+        for (int xBox = xboundary; xBox < xboundary + squareSize; xBox++) {
+            for (int yBox = yboundary; yBox < yboundary + squareSize; yBox++) {
+                box.add(board[x][y]);
+            }
+        }
+        SudokuField[] boxArray = new SudokuField[box.size()];
+        box.toArray(boxArray);
+        return new SudokuBox(boxArray);
+    }
+
     /**
      *  Check if Sudoku board follows the rules, is correctly solved.
      *
      * @return Boolean that specifies correctness of board
      */
-    public boolean isLayoutCorrect() {
-        int[] occurrenceCounter = new int [boardDimension];
+    public boolean checkBoard() {
+        int[] occurrenceCounter = new int [sudokuDimension];
 
         // check row correctness
-        for (int x = 0; x < boardDimension; x++) {
+        for (int x = 0; x < sudokuDimension; x++) {
             Arrays.fill(occurrenceCounter, 0);
-            for (int y = 0; y < boardDimension; y++) {
-                occurrenceCounter[board[x][y] - 1]++;
+            for (int y = 0; y < sudokuDimension; y++) {
+                occurrenceCounter[board[x][y].getFieldValue() - 1]++;
             }
             for (int value : occurrenceCounter) {
                 if (value > 1) {
@@ -58,10 +93,10 @@ public class SudokuBoard {
         }
 
         // check columns correctness
-        for (int y = 0; y < boardDimension; y++) {
+        for (int y = 0; y < sudokuDimension; y++) {
             Arrays.fill(occurrenceCounter, 0);
-            for (int x = 0; x < boardDimension; x++) {
-                occurrenceCounter[board[x][y] - 1]++;
+            for (int x = 0; x < sudokuDimension; x++) {
+                occurrenceCounter[board[x][y].getFieldValue() - 1]++;
             }
             for (int value : occurrenceCounter) {
                 if (value > 1) {
@@ -72,12 +107,12 @@ public class SudokuBoard {
 
         // check squares correctness
         int squareSize = 3;
-        for (int x = 0; x < boardDimension; x += squareSize) {
-            for (int y = 0; y < boardDimension; y += squareSize) {
+        for (int x = 0; x < sudokuDimension; x += squareSize) {
+            for (int y = 0; y < sudokuDimension; y += squareSize) {
                 Arrays.fill(occurrenceCounter, 0);
                 for (int xinternal = x; xinternal < squareSize; xinternal++) {
                     for (int yinternal = y; yinternal < squareSize; yinternal++) {
-                        occurrenceCounter[board[xinternal][yinternal] - 1]++;
+                        occurrenceCounter[board[xinternal][yinternal].getFieldValue() - 1]++;
                     }
                 }
                 for (int value : occurrenceCounter) {
@@ -99,104 +134,13 @@ public class SudokuBoard {
      * @return Boolean that specifies correctness of board
      */
     public boolean isLayoutAllowed(int rowId, int columnId) {
-        if (isValidRow(rowId) && isValidColumn(columnId) && isValidBox(rowId, columnId)) {
+        if (getRow(rowId).verify() && getColumn(columnId).verify() && getBox(rowId, columnId).verify()) {
             return true;
         }
         return false;
     }
 
-    /**
-     *  Check if specific column in Sudoku board is valid, ignore all 0's.
-     *
-     * @param columnId  The number of column in board to check (starts from 0)
-     * @return Boolean that specifies correctness of column
-     * @throws IndexOutOfBoundsException When param not in range
-     */
-    private boolean isValidColumn(int columnId) {
-        if (columnId >= boardDimension || columnId < 0) {
-            throw new IndexOutOfBoundsException("ColumnId: " + columnId + " not allowed");
-        }
 
-        int[] occurrenceCounter = new int[boardDimension + 1];
-
-        Arrays.fill(occurrenceCounter, 0);
-        for (int x = 0; x < boardDimension; x++) {
-            occurrenceCounter[board[x][columnId]]++;
-        }
-
-        for (int number = 1; number <= boardDimension; number++) {
-            if (occurrenceCounter[number] > 1) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *  Check if specific row in Sudoku board is valid, ignore all 0's.
-     *
-     * @param rowId The number of row in board to check (starts from 0)
-     * @return Boolean that specifies correctness of row
-     * @throws IndexOutOfBoundsException When param not in range
-     */
-    private boolean isValidRow(int rowId) {
-        if (rowId >= boardDimension || rowId < 0) {
-            throw new IndexOutOfBoundsException("ColumnId: " + rowId + " not allowed");
-        }
-
-        int[] occurrenceCounter = new int[boardDimension + 1];
-
-        Arrays.fill(occurrenceCounter, 0);
-        for (int y = 0; y < boardDimension; y++) {
-            occurrenceCounter[board[rowId][y]]++;
-        }
-
-        for (int number = 1; number <= boardDimension; number++) {
-            if (occurrenceCounter[number] > 1) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *  Check if specific square box in Sudoku board is valid, ignore all 0's.
-     *
-     * @param rowId The row number, used to find corresponding square box
-     * @param columnId The column number, used to find corresponding square box
-     * @return Boolean that specifies correctness of box
-     * @throws IndexOutOfBoundsException When param not in range
-     */
-    private boolean isValidBox(int rowId, int columnId) {
-        if (rowId >= boardDimension || rowId < 0) {
-            throw new IndexOutOfBoundsException("RowId: " + rowId + " not allowed");
-        }
-        if (columnId >= boardDimension || columnId < 0) {
-            throw new IndexOutOfBoundsException("ColumnId: " + columnId + " not allowed");
-        }
-
-        int squareSize = 3;
-        int xboundary = (int) Math.floor(rowId / squareSize) * squareSize;
-        int yboundary = (int) Math.floor(columnId / squareSize) * squareSize;
-        int[] occurrenceCounter = new int[boardDimension + 1];
-
-        Arrays.fill(occurrenceCounter, 0);
-        for (int x = xboundary; x < xboundary + squareSize; x++) {
-            for (int y = yboundary; y < yboundary + squareSize; y++) {
-                occurrenceCounter[board[x][y]]++;
-            }
-        }
-
-        for (int number = 1; number <= boardDimension; number++) {
-            if (occurrenceCounter[number] > 1) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     @Override
     public boolean equals(Object obj) {

@@ -2,21 +2,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SudokuBoardTest {
-    @Test
-    public void SudokuBoard_Initializer_AllValuesEqualsZero() {
-        SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
-        for (int[] row : board.getBoard()) {
-            for (int valueInRow: row) {
-                assertEquals(valueInRow, 0);
-            }
-        }
-    }
 
     @Test
     public void SudokuBoard_FillBoardFunction_LayoutIsCorrect() {
         SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
         board.solveGame();
-        assertEquals(true, board.isLayoutCorrect());
+        assertEquals(true, board.checkBoard());
     }
 
     @Test
