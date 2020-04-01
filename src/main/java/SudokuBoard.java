@@ -9,9 +9,17 @@ public class SudokuBoard {
     private SudokuField[][] board = new SudokuField[sudokuDimension][sudokuDimension];
     private SudokuSolver sudokuSolver;
 
-    SudokuBoard(){
-        Arrays.fill(board, new SudokuField());
-    };
+    SudokuBoard(SudokuSolver solver) {
+        this();
+        sudokuSolver = solver;
+    }
+
+    SudokuBoard() {
+        for (SudokuField[] row : board) {
+            Arrays.fill(row, new SudokuField());
+        }
+    }
+
     /**
      *  Returns Sudoku board copy.
      *
@@ -37,10 +45,6 @@ public class SudokuBoard {
         sudokuSolver.solve(this);
     }
 
-    SudokuBoard(SudokuSolver solver) {
-        sudokuSolver = solver;
-    }
-
     SudokuRow getRow(int y) {
         SudokuField[] row = board[y].clone();
         return new SudokuRow(row);
@@ -48,7 +52,7 @@ public class SudokuBoard {
 
     SudokuColumn getColumn(int x) {
         SudokuField[] column = new SudokuField[sudokuDimension];
-        for(int i = 0; i < sudokuDimension; i++){
+        for (int i = 0; i < sudokuDimension; i++) {
             column[i] = board[i][x];
         }
         return new SudokuColumn(column);
@@ -61,8 +65,8 @@ public class SudokuBoard {
         List<SudokuField> box = new ArrayList<SudokuField>();
 
 
-        for (int xBox = xboundary; xBox < xboundary + squareSize; xBox++) {
-            for (int yBox = yboundary; yBox < yboundary + squareSize; yBox++) {
+        for (int xbox = xboundary; xbox < xboundary + squareSize; xbox++) {
+            for (int ybox = yboundary; ybox < yboundary + squareSize; ybox++) {
                 box.add(board[x][y]);
             }
         }
@@ -77,16 +81,16 @@ public class SudokuBoard {
      * @return Boolean that specifies correctness of board
      */
     public boolean checkBoard() {
-        int[] occurrenceCounter = new int [sudokuDimension];
+        int[] occurrenceCounter = new int [sudokuDimension + 1];
 
         // check row correctness
         for (int x = 0; x < sudokuDimension; x++) {
             Arrays.fill(occurrenceCounter, 0);
             for (int y = 0; y < sudokuDimension; y++) {
-                occurrenceCounter[board[x][y].getFieldValue() - 1]++;
+                occurrenceCounter[board[x][y].getFieldValue()]++;
             }
-            for (int value : occurrenceCounter) {
-                if (value > 1) {
+            for (int i = 1; i < sudokuDimension; i++) {
+                if (occurrenceCounter[i] > 1) {
                     return false;
                 }
             }
@@ -96,10 +100,10 @@ public class SudokuBoard {
         for (int y = 0; y < sudokuDimension; y++) {
             Arrays.fill(occurrenceCounter, 0);
             for (int x = 0; x < sudokuDimension; x++) {
-                occurrenceCounter[board[x][y].getFieldValue() - 1]++;
+                occurrenceCounter[board[x][y].getFieldValue()]++;
             }
-            for (int value : occurrenceCounter) {
-                if (value > 1) {
+            for (int i = 1; i < sudokuDimension; i++) {
+                if (occurrenceCounter[i] > 1) {
                     return false;
                 }
             }
@@ -112,11 +116,11 @@ public class SudokuBoard {
                 Arrays.fill(occurrenceCounter, 0);
                 for (int xinternal = x; xinternal < squareSize; xinternal++) {
                     for (int yinternal = y; yinternal < squareSize; yinternal++) {
-                        occurrenceCounter[board[xinternal][yinternal].getFieldValue() - 1]++;
+                        occurrenceCounter[board[xinternal][yinternal].getFieldValue()]++;
                     }
                 }
-                for (int value : occurrenceCounter) {
-                    if (value > 1) {
+                for (int i = 1; i < sudokuDimension; i++) {
+                    if (occurrenceCounter[i] > 1) {
                         return false;
                     }
                 }
@@ -134,13 +138,13 @@ public class SudokuBoard {
      * @return Boolean that specifies correctness of board
      */
     public boolean isLayoutAllowed(int rowId, int columnId) {
-        if (getRow(rowId).verify() && getColumn(columnId).verify() && getBox(rowId, columnId).verify()) {
+        if (getRow(rowId).verify()
+                && getColumn(columnId).verify()
+                && getBox(rowId, columnId).verify()) {
             return true;
         }
         return false;
     }
-
-
 
     @Override
     public boolean equals(Object obj) {

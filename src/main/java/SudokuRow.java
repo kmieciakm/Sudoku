@@ -4,9 +4,9 @@ public class SudokuRow implements SudokuStructure {
 
     private SudokuField[] rowArray;
 
-    SudokuRow (SudokuField[] newRowArray){
+    SudokuRow(SudokuField[] newRowArray) {
         rowArray = newRowArray.clone();
-    };
+    }
 
     public boolean verify() {
         int[] occurrenceCounter = new int[SudokuBoard.sudokuDimension + 1];

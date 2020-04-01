@@ -4,9 +4,9 @@ public class SudokuColumn implements SudokuStructure {
 
     private SudokuField[] columnArray;
 
-    SudokuColumn (SudokuField[] newColumnArray){
+    SudokuColumn(SudokuField[] newColumnArray) {
         columnArray = newColumnArray.clone();
-    };
+    }
 
     public boolean verify() {
         int[] occurrenceCounter = new int[SudokuBoard.sudokuDimension + 1];

@@ -1,19 +1,19 @@
 public class SudokuField {
     private int value;
 
-    SudokuField(){
+    SudokuField() {
         value = 0;
-    };
+    }
 
-    SudokuField(int initValue){
+    SudokuField(int initValue) {
         setFieldValue(initValue);
-    };
+    }
 
-    int getFieldValue(){
+    int getFieldValue() {
         return value;
     }
 
-    void setFieldValue(int newValue){
+    void setFieldValue(int newValue) {
         value = newValue;
     }
 }
