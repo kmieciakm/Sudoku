@@ -45,20 +45,20 @@ public class SudokuBoard {
         sudokuSolver.solve(this);
     }
 
-    SudokuRow getRow(int y) {
+    SudokuStructure getRow(int y) {
         SudokuField[] row = board[y].clone();
-        return new SudokuRow(row);
+        return new SudokuStructure(row);
     }
 
-    SudokuColumn getColumn(int x) {
+    SudokuStructure getColumn(int x) {
         SudokuField[] column = new SudokuField[sudokuDimension];
         for (int i = 0; i < sudokuDimension; i++) {
             column[i] = board[i][x];
         }
-        return new SudokuColumn(column);
+        return new SudokuStructure(column);
     }
 
-    SudokuBox getBox(int x, int y) {
+    SudokuStructure getBox(int x, int y) {
         int squareSize = 3;
         int xboundary = (int) Math.floor(x / squareSize) * squareSize;
         int yboundary = (int) Math.floor(y / squareSize) * squareSize;
@@ -72,7 +72,7 @@ public class SudokuBoard {
         }
         SudokuField[] boxArray = new SudokuField[box.size()];
         box.toArray(boxArray);
-        return new SudokuBox(boxArray);
+        return new SudokuStructure(boxArray);
     }
 
     /**

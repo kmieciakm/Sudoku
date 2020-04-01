@@ -31,17 +31,17 @@ public class SudokuBoardTest {
     }
 
     @Test
-    public void SudokuColumn_AddedWrongColumn_VerifyFalse(){
+    public void SudokuStructure_IncorrectStructure_VerifyFalse(){
         SudokuField[] columnArray = new SudokuField[SudokuBoard.sudokuDimension];
         Arrays.fill(columnArray, new SudokuField(1));
-        SudokuColumn wrongColumn = new SudokuColumn(columnArray);
+        SudokuStructure wrongColumn = new SudokuStructure(columnArray);
 
         assertEquals(false, wrongColumn.verify());
     }
 
     @Test
-    public void SudokuColumn_CorrectColumn_VerifyTrue(){
-        SudokuColumn wrongColumn = new SudokuColumn( new SudokuField[] {
+    public void SudokuStructure_CorrectStructure_VerifyTrue(){
+        SudokuStructure wrongColumn = new SudokuStructure( new SudokuField[] {
                 new SudokuField(1),
                 new SudokuField(2),
                 new SudokuField(3),
@@ -55,15 +55,5 @@ public class SudokuBoardTest {
 
         assertEquals(true, wrongColumn.verify());
     }
-
-    @Test
-    public void SudokuRow_AddedWrongRow_VerifyFalse(){
-        SudokuField[] rowArray = new SudokuField[SudokuBoard.sudokuDimension];
-        Arrays.fill(rowArray, new SudokuField(1));
-        SudokuColumn wrongRow = new SudokuColumn(rowArray);
-
-        assertEquals(false, wrongRow.verify());
-    }
-
 
 }
