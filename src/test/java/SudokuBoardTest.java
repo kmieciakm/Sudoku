@@ -14,6 +14,14 @@ public class SudokuBoardTest {
     }
 
     @Test
+    public void SudokBoard_IsLayoutAllowed_True() {
+        SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
+        board.set(3,5,2);
+        board.set(0,0,1);
+        assertEquals(true, board.isLayoutAllowed(0,0));
+    }
+
+    @Test
     public void SudokuBoard_GenerateTwoBoards_BoardsDiffer() {
         SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
         SudokuBoard sudokuTwo = new SudokuBoard(new BacktrackingSudokuSolver());
@@ -25,35 +33,18 @@ public class SudokuBoardTest {
     @Test
     public void SudokuBoard_PassTwoEqualsBoards_BoardsComparisonCorrect() {
         SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
-        SudokuBoard sudokuTwo = sudokuOne;
-        sudokuOne.solveGame();
+        SudokuBoard sudokuTwo = new SudokuBoard(new BacktrackingSudokuSolver());
         assertEquals(true, sudokuOne.equals(sudokuTwo));
     }
 
     @Test
-    public void SudokuStructure_IncorrectStructure_VerifyFalse(){
-        SudokuField[] columnArray = new SudokuField[SudokuBoard.sudokuDimension];
-        Arrays.fill(columnArray, new SudokuField(1));
-        SudokuStructure wrongColumn = new SudokuStructure(columnArray);
-
-        assertEquals(false, wrongColumn.verify());
-    }
-
-    @Test
-    public void SudokuStructure_CorrectStructure_VerifyTrue(){
-        SudokuStructure wrongColumn = new SudokuStructure( new SudokuField[] {
-                new SudokuField(1),
-                new SudokuField(2),
-                new SudokuField(3),
-                new SudokuField(4),
-                new SudokuField(5),
-                new SudokuField(6),
-                new SudokuField(7),
-                new SudokuField(8),
-                new SudokuField(9)
-        });
-
-        assertEquals(true, wrongColumn.verify());
+    public void SudokuBoard_SetValue_ValueSaved() {
+        SudokuBoard sudokuBoard = new SudokuBoard(new BacktrackingSudokuSolver());
+        int value = 5;
+        sudokuBoard.set(1,1, value);
+        assertEquals(value, sudokuBoard.get(1,1));
+        assertNotEquals(value, sudokuBoard.get(1,2));
+        assertNotEquals(value, sudokuBoard.get(2,1));
     }
 
 }

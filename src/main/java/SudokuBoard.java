@@ -1,7 +1,5 @@
 import java.lang.Math;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class SudokuBoard {
 
@@ -15,22 +13,11 @@ public class SudokuBoard {
     }
 
     SudokuBoard() {
-        for (SudokuField[] row : board) {
-            Arrays.fill(row, new SudokuField());
-        }
-    }
-
-    /**
-     *  Returns Sudoku board copy.
-     *
-     * @return Copy of the board
-     */
-    public SudokuField[][] getBoard() {
-        SudokuField[][] boardCopy = new SudokuField[board.length][];
         for (int i = 0; i < board.length; i++) {
-            boardCopy[i] = board[i].clone();
+            for (int j = 0; j < board[i].length; j++) {
+                board[i][j] = new SudokuField();
+            }
         }
-        return boardCopy;
     }
 
     public void set(int x, int y, int value) {
@@ -45,33 +32,32 @@ public class SudokuBoard {
         sudokuSolver.solve(this);
     }
 
-    SudokuStructure getRow(int y) {
+    public SudokuStructure getRow(int y) {
         SudokuField[] row = board[y].clone();
         return new SudokuStructure(row);
     }
 
-    SudokuStructure getColumn(int x) {
+    public SudokuStructure getColumn(int x) {
         SudokuField[] column = new SudokuField[sudokuDimension];
         for (int i = 0; i < sudokuDimension; i++) {
-            column[i] = board[i][x];
+            column[i] = new SudokuField(this.get(i, x));
         }
         return new SudokuStructure(column);
     }
 
-    SudokuStructure getBox(int x, int y) {
+    public SudokuStructure getBox(int x, int y) {
         int squareSize = 3;
         int xboundary = (int) Math.floor(x / squareSize) * squareSize;
         int yboundary = (int) Math.floor(y / squareSize) * squareSize;
-        List<SudokuField> box = new ArrayList<SudokuField>();
-
+        SudokuField[] boxArray = new SudokuField[9];
+        int i = 0;
 
         for (int xbox = xboundary; xbox < xboundary + squareSize; xbox++) {
             for (int ybox = yboundary; ybox < yboundary + squareSize; ybox++) {
-                box.add(board[x][y]);
+                boxArray[i] = new SudokuField(this.get(xbox, ybox));
+                i++;
             }
         }
-        SudokuField[] boxArray = new SudokuField[box.size()];
-        box.toArray(boxArray);
         return new SudokuStructure(boxArray);
     }
 
@@ -87,9 +73,9 @@ public class SudokuBoard {
         for (int x = 0; x < sudokuDimension; x++) {
             Arrays.fill(occurrenceCounter, 0);
             for (int y = 0; y < sudokuDimension; y++) {
-                occurrenceCounter[board[x][y].getFieldValue()]++;
+                occurrenceCounter[this.get(x, y)]++;
             }
-            for (int i = 1; i < sudokuDimension; i++) {
+            for (int i = 0; i < sudokuDimension; i++) {
                 if (occurrenceCounter[i] > 1) {
                     return false;
                 }
@@ -100,9 +86,9 @@ public class SudokuBoard {
         for (int y = 0; y < sudokuDimension; y++) {
             Arrays.fill(occurrenceCounter, 0);
             for (int x = 0; x < sudokuDimension; x++) {
-                occurrenceCounter[board[x][y].getFieldValue()]++;
+                occurrenceCounter[this.get(x, y)]++;
             }
-            for (int i = 1; i < sudokuDimension; i++) {
+            for (int i = 0; i < sudokuDimension; i++) {
                 if (occurrenceCounter[i] > 1) {
                     return false;
                 }
@@ -119,7 +105,7 @@ public class SudokuBoard {
                         occurrenceCounter[board[xinternal][yinternal].getFieldValue()]++;
                     }
                 }
-                for (int i = 1; i < sudokuDimension; i++) {
+                for (int i = 0; i < sudokuDimension; i++) {
                     if (occurrenceCounter[i] > 1) {
                         return false;
                     }
@@ -164,11 +150,12 @@ public class SudokuBoard {
 
         for (int rowId = 0; rowId < board.length; rowId++) {
             for (int columnId = 0; columnId < board[rowId].length; columnId++) {
-                if (board[rowId][columnId] != objBoard.getBoard()[rowId][columnId]) {
+                if (this.get(rowId, columnId) != objBoard.get(rowId, columnId)) {
                     return false;
                 }
             }
         }
         return true;
     }
+
 }

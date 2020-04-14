@@ -30,7 +30,7 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
             return true;
         }
 
-        List<Integer> numbers = new ArrayList<Integer>() {{
+        List<Integer> numbers = new ArrayList<>() {{
             add(1);
             add(2);
             add(3);

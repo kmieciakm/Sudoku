@@ -9,11 +9,11 @@ public class SudokuField {
         setFieldValue(initValue);
     }
 
-    int getFieldValue() {
+    public int getFieldValue() {
         return value;
     }
 
-    void setFieldValue(int newValue) {
+    public void setFieldValue(int newValue) {
         value = newValue;
     }
 }

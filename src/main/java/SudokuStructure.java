@@ -4,7 +4,14 @@ public class SudokuStructure {
     protected SudokuField[] values;
 
     SudokuStructure(SudokuField[] values) {
-        this.values = values;
+        this.values = values.clone();
+    }
+
+    SudokuStructure() {
+        values = new SudokuField[SudokuBoard.sudokuDimension];
+        for (int i = 0; i < values.length; i++) {
+            values[i] = new SudokuField();
+        }
     }
 
     public boolean verify() {
@@ -23,4 +30,30 @@ public class SudokuStructure {
 
         return true;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        SudokuStructure objStructure = (SudokuStructure) obj;
+
+        for (int i = 0; i < values.length; i++) {
+            if (objStructure.values[i].getFieldValue() != this.values[i].getFieldValue()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
