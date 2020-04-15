@@ -1,5 +1,7 @@
 import java.lang.Math;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class SudokuBoard {
 
@@ -33,14 +35,14 @@ public class SudokuBoard {
     }
 
     public SudokuStructure getRow(int y) {
-        SudokuField[] row = board[y].clone();
+        List<SudokuField> row = Arrays.asList(board[y].clone());
         return new SudokuStructure(row);
     }
 
     public SudokuStructure getColumn(int x) {
-        SudokuField[] column = new SudokuField[sudokuDimension];
+        List<SudokuField> column = new ArrayList<>();
         for (int i = 0; i < sudokuDimension; i++) {
-            column[i] = new SudokuField(this.get(i, x));
+            column.add(new SudokuField(this.get(i, x)));
         }
         return new SudokuStructure(column);
     }
@@ -49,16 +51,14 @@ public class SudokuBoard {
         int squareSize = 3;
         int xboundary = (int) Math.floor(x / squareSize) * squareSize;
         int yboundary = (int) Math.floor(y / squareSize) * squareSize;
-        SudokuField[] boxArray = new SudokuField[9];
-        int i = 0;
+        List<SudokuField> boxList = new ArrayList<>();
 
         for (int xbox = xboundary; xbox < xboundary + squareSize; xbox++) {
             for (int ybox = yboundary; ybox < yboundary + squareSize; ybox++) {
-                boxArray[i] = new SudokuField(this.get(xbox, ybox));
-                i++;
+                boxList.add(new SudokuField(this.get(xbox, ybox)));
             }
         }
-        return new SudokuStructure(boxArray);
+        return new SudokuStructure(boxList);
     }
 
     /**

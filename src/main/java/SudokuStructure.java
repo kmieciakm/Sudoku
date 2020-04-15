@@ -1,16 +1,24 @@
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class SudokuStructure {
-    protected SudokuField[] values;
+    protected List<SudokuField> values = Arrays.asList(
+        new SudokuField[SudokuBoard.sudokuDimension]
+    );
 
-    SudokuStructure(SudokuField[] values) {
-        this.values = values.clone();
+    SudokuStructure(List<SudokuField> values) {
+        if (this.values.size() != values.size()) {
+            throw new IllegalArgumentException(
+                "Sudoku structure must contain exactly " + values.size() + "elements"
+            );
+        }
+        Collections.copy(this.values, values);
     }
 
     SudokuStructure() {
-        values = new SudokuField[SudokuBoard.sudokuDimension];
-        for (int i = 0; i < values.length; i++) {
-            values[i] = new SudokuField();
+        for (int i = 0; i < values.size(); i++) {
+            values.set(i, new SudokuField());
         }
     }
 
@@ -19,7 +27,7 @@ public class SudokuStructure {
 
         Arrays.fill(occurrenceCounter, 0);
         for (int i = 0; i < SudokuBoard.sudokuDimension; i++) {
-            occurrenceCounter[values[i].getFieldValue()]++;
+            occurrenceCounter[values.get(i).getFieldValue()]++;
         }
 
         for (int number = 1; number <= SudokuBoard.sudokuDimension; number++) {
@@ -46,9 +54,8 @@ public class SudokuStructure {
         }
 
         SudokuStructure objStructure = (SudokuStructure) obj;
-
-        for (int i = 0; i < values.length; i++) {
-            if (objStructure.values[i].getFieldValue() != this.values[i].getFieldValue()) {
+        for (int i = 0; i < values.size(); i++) {
+            if (objStructure.values.get(i).getFieldValue() != this.values.get(i).getFieldValue()) {
                 return false;
             }
         }
