@@ -67,52 +67,11 @@ public class SudokuBoard {
      * @return Boolean that specifies correctness of board
      */
     public boolean checkBoard() {
-        int[] occurrenceCounter = new int [sudokuDimension + 1];
-
-        // check row correctness
-        for (int x = 0; x < sudokuDimension; x++) {
-            Arrays.fill(occurrenceCounter, 0);
-            for (int y = 0; y < sudokuDimension; y++) {
-                occurrenceCounter[this.get(x, y)]++;
-            }
-            for (int i = 0; i < sudokuDimension; i++) {
-                if (occurrenceCounter[i] > 1) {
-                    return false;
-                }
+        for (int i = 0; i < sudokuDimension; i++) {
+            if (!getRow(i).check() || !getColumn(i).check()) {
+                return false;
             }
         }
-
-        // check columns correctness
-        for (int y = 0; y < sudokuDimension; y++) {
-            Arrays.fill(occurrenceCounter, 0);
-            for (int x = 0; x < sudokuDimension; x++) {
-                occurrenceCounter[this.get(x, y)]++;
-            }
-            for (int i = 0; i < sudokuDimension; i++) {
-                if (occurrenceCounter[i] > 1) {
-                    return false;
-                }
-            }
-        }
-
-        // check squares correctness
-        int squareSize = 3;
-        for (int x = 0; x < sudokuDimension; x += squareSize) {
-            for (int y = 0; y < sudokuDimension; y += squareSize) {
-                Arrays.fill(occurrenceCounter, 0);
-                for (int xinternal = x; xinternal < squareSize; xinternal++) {
-                    for (int yinternal = y; yinternal < squareSize; yinternal++) {
-                        occurrenceCounter[board[xinternal][yinternal].getFieldValue()]++;
-                    }
-                }
-                for (int i = 0; i < sudokuDimension; i++) {
-                    if (occurrenceCounter[i] > 1) {
-                        return false;
-                    }
-                }
-            }
-        }
-
         return true;
     }
 

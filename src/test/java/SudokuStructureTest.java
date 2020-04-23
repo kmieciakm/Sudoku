@@ -78,9 +78,9 @@ public class SudokuStructureTest {
     @Test
     public void SudokuStructure_CorrectStructure_VerifyTrue() {
         SudokuStructure wrongColumn = new SudokuStructure(Arrays.asList(
-                new SudokuField(0),
-                new SudokuField(0),
-                new SudokuField(0),
+                new SudokuField(1),
+                new SudokuField(2),
+                new SudokuField(3),
                 new SudokuField(4),
                 new SudokuField(5),
                 new SudokuField(6),

@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SudokuStructure {
-    protected List<SudokuField> values = Arrays.asList(
+    private List<SudokuField> values = Arrays.asList(
         new SudokuField[SudokuBoard.sudokuDimension]
     );
 
@@ -27,6 +27,26 @@ public class SudokuStructure {
 
         Arrays.fill(occurrenceCounter, 0);
         for (int i = 0; i < SudokuBoard.sudokuDimension; i++) {
+            occurrenceCounter[values.get(i).getFieldValue()]++;
+        }
+
+        for (int number = 1; number <= SudokuBoard.sudokuDimension; number++) {
+            if (occurrenceCounter[number] > 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean check() {
+        int[] occurrenceCounter = new int[SudokuBoard.sudokuDimension + 1];
+
+        Arrays.fill(occurrenceCounter, 0);
+        for (int i = 0; i < SudokuBoard.sudokuDimension; i++) {
+            if (values.get(i).getFieldValue() == 0) {
+               return false;
+            }
             occurrenceCounter[values.get(i).getFieldValue()]++;
         }
 
