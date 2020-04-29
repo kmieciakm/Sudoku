@@ -85,11 +85,29 @@ public class SudokuBoard {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SudokuBoard)) return false;
-        SudokuBoard that = (SudokuBoard) o;
-        return Objects.equal(board, that.board);
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        SudokuBoard objBoard = (SudokuBoard) obj;
+
+        for (int rowId = 0; rowId < board.length; rowId++) {
+            for (int columnId = 0; columnId < board[rowId].length; columnId++) {
+                if (this.get(rowId, columnId) != objBoard.get(rowId, columnId)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
