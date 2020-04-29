@@ -1,3 +1,5 @@
+package sudoku;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -7,7 +9,7 @@ public class SudokuStructure {
         new SudokuField[SudokuBoard.sudokuDimension]
     );
 
-    SudokuStructure(List<SudokuField> values) {
+    public SudokuStructure(List<SudokuField> values) {
         if (this.values.size() != values.size()) {
             throw new IllegalArgumentException(
                 "Sudoku structure must contain exactly " + values.size() + "elements"
@@ -16,7 +18,7 @@ public class SudokuStructure {
         Collections.copy(this.values, values);
     }
 
-    SudokuStructure() {
+    public SudokuStructure() {
         for (int i = 0; i < values.size(); i++) {
             values.set(i, new SudokuField());
         }

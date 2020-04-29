@@ -1,7 +1,10 @@
+package sudoku;
+
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import solver.SudokuSolver;
 
 public class SudokuBoard {
 
@@ -9,7 +12,7 @@ public class SudokuBoard {
     private SudokuField[][] board = new SudokuField[sudokuDimension][sudokuDimension];
     private SudokuSolver sudokuSolver;
 
-    SudokuBoard(SudokuSolver solver) {
+    public SudokuBoard(SudokuSolver solver) {
         this();
         sudokuSolver = solver;
     }
@@ -61,11 +64,6 @@ public class SudokuBoard {
         return new SudokuStructure(boxList);
     }
 
-    /**
-     *  Check if Sudoku board follows the rules, is correctly solved.
-     *
-     * @return Boolean that specifies correctness of board
-     */
     public boolean checkBoard() {
         for (int i = 0; i < sudokuDimension; i++) {
             if (!getRow(i).check() || !getColumn(i).check()) {
@@ -75,13 +73,6 @@ public class SudokuBoard {
         return true;
     }
 
-    /**
-     *  Check if current inserted numbers to board follows the rules.
-     *
-     * @param rowId index of a row
-     * @param columnId index of a column
-     * @return Boolean that specifies correctness of board
-     */
     public boolean isLayoutAllowed(int rowId, int columnId) {
         if (getRow(rowId).verify()
                 && getColumn(columnId).verify()

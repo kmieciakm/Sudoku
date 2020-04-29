@@ -1,11 +1,13 @@
+package sudoku;
+
 public class SudokuField {
     private int value;
 
-    SudokuField() {
+    public SudokuField() {
         value = 0;
     }
 
-    SudokuField(int initValue) {
+    public SudokuField(int initValue) {
         setFieldValue(initValue);
     }
 
