@@ -1,11 +1,10 @@
 package sudoku;
 
+import com.google.common.base.Objects;
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.google.common.base.Objects;
 import solver.SudokuSolver;
 
 public class SudokuBoard {
@@ -76,12 +75,9 @@ public class SudokuBoard {
     }
 
     public boolean isLayoutAllowed(int rowId, int columnId) {
-        if (getRow(rowId).verify()
+        return getRow(rowId).verify()
                 && getColumn(columnId).verify()
-                && getBox(rowId, columnId).verify()) {
-            return true;
-        }
-        return false;
+                && getBox(rowId, columnId).verify();
     }
 
     @Override
@@ -117,7 +113,8 @@ public class SudokuBoard {
 
     @Override
     public String toString() {
-        return "SudokuBoard{" +
-                "board=" + Arrays.toString(board);
+        return "SudokuBoard{"
+                + "board="
+                + Arrays.toString(board);
     }
 }

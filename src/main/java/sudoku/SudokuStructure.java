@@ -1,7 +1,6 @@
 package sudoku;
 
 import com.google.common.base.Objects;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -54,7 +53,7 @@ public class SudokuStructure {
             occurrenceCounter[values.get(i).getFieldValue()]++;
         }
 
-        for (int number = 1; number <= SudokuBoard.sudokuDimension; number++) {
+        for (int number = 0; number <= SudokuBoard.sudokuDimension; number++) {
             if (occurrenceCounter[number] > 1) {
                 return false;
             }
@@ -65,8 +64,12 @@ public class SudokuStructure {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SudokuStructure)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SudokuStructure)) {
+            return false;
+        }
         SudokuStructure that = (SudokuStructure) o;
         return Objects.equal(values, that.values);
     }
@@ -78,8 +81,9 @@ public class SudokuStructure {
 
     @Override
     public String toString() {
-        return "SudokuStructure{" +
-                "values=" + values +
-                '}';
+        return "SudokuStructure{"
+                + "values="
+                + values
+                + '}';
     }
 }
