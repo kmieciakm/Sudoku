@@ -4,6 +4,8 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.google.common.base.Objects;
 import solver.SudokuSolver;
 
 public class SudokuBoard {
@@ -83,29 +85,21 @@ public class SudokuBoard {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-
-        if (this == obj) {
-            return true;
-        }
-
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        SudokuBoard objBoard = (SudokuBoard) obj;
-
-        for (int rowId = 0; rowId < board.length; rowId++) {
-            for (int columnId = 0; columnId < board[rowId].length; columnId++) {
-                if (this.get(rowId, columnId) != objBoard.get(rowId, columnId)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SudokuBoard)) return false;
+        SudokuBoard that = (SudokuBoard) o;
+        return Objects.equal(board, that.board);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(board);
+    }
+
+    @Override
+    public String toString() {
+        return "SudokuBoard{" +
+                "board=" + Arrays.toString(board);
+    }
 }
