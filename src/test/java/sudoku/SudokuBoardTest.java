@@ -39,6 +39,20 @@ public class SudokuBoardTest {
     }
 
     @Test
+    public void SudokuBoard_SameReferance_BoardsComparisonCorrect() {
+        SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
+        SudokuBoard sudokuTwo = sudokuOne;
+        assertEquals(true, sudokuOne.equals(sudokuTwo));
+    }
+
+    @Test
+    public void SudokuBoard_CompareToNull_BoardsComparisonCorrect() {
+        SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
+        SudokuBoard sudokuTwo = sudokuOne;
+        assertEquals(false, sudokuOne.equals(null));
+    }
+
+    @Test
     public void SudokuBoard_SetValue_ValueSaved() {
         SudokuBoard sudokuBoard = new SudokuBoard(new BacktrackingSudokuSolver());
         int value = 5;

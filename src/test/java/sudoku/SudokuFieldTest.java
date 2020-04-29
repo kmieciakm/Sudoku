@@ -18,4 +18,27 @@ public class SudokuFieldTest {
         assertEquals(5, field.getFieldValue());
     }
 
+    @Test void SudokuField_SameObject_HashCodeEquals() {
+        SudokuField fieldOne = new SudokuField(5);
+        SudokuField fieldTwo = new SudokuField(5);
+        assertEquals(fieldOne.hashCode(), fieldOne.hashCode());
+    }
+
+    @Test void SudokuField_CompareToNull_EqualsFalse() {
+        SudokuField fieldOne = new SudokuField(5);
+        assertEquals(false, fieldOne.equals(null));
+    }
+
+    @Test void SudokuField_SameReferance_EqualsTrue() {
+        SudokuField fieldOne = new SudokuField(5);
+        SudokuField fieldTwo = fieldOne;
+        assertEquals(true, fieldOne.equals(fieldTwo));
+    }
+
+    @Test void SudokuField_SameObject_EqualsTrue() {
+        SudokuField fieldOne = new SudokuField(5);
+        SudokuField fieldTwo = new SudokuField(5);
+        assertEquals(true, fieldOne.equals(fieldTwo));
+    }
+
 }

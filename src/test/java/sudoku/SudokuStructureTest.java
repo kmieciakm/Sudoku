@@ -52,6 +52,12 @@ public class SudokuStructureTest {
     }
 
     @Test
+    public void SudokuStructure_CompareToNull_EqualsFalse() {
+        SudokuStructure row = new SudokuStructure();
+        assertEquals(false, row.equals(null));
+    }
+
+    @Test
     public void SudokuStructure_CompareStructures_EqualsFalse() {
         SudokuStructure row = new SudokuStructure();
         SudokuStructure rowExpected = new SudokuStructure(Arrays.asList(
