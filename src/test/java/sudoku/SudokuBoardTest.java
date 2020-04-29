@@ -1,3 +1,6 @@
+package sudoku;
+
+import solver.BacktrackingSudokuSolver;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +36,35 @@ public class SudokuBoardTest {
         SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
         SudokuBoard sudokuTwo = new SudokuBoard(new BacktrackingSudokuSolver());
         assertEquals(true, sudokuOne.equals(sudokuTwo));
+    }
+
+    @Test
+    public void SudokuBoard_PassTwoEqualsBoards_HashCodeDiffer() {
+        SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
+        SudokuBoard sudokuTwo = new SudokuBoard(new BacktrackingSudokuSolver());
+        assertNotEquals(sudokuTwo.hashCode(), sudokuOne.hashCode());
+    }
+
+    @Test
+    public void SudoBoard_SameReference_HashCodeMatches() {
+        SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
+        SudokuBoard sudokuTwo = sudokuOne;
+        assertEquals(sudokuTwo.hashCode(), sudokuOne.hashCode());
+    }
+
+    @Test
+    public void SudokuBoard_SameReferance_BoardsComparisonCorrect() {
+        SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
+        sudokuOne.solveGame();
+        SudokuBoard sudokuTwo = sudokuOne;
+        assertEquals(true, sudokuOne.equals(sudokuTwo));
+    }
+
+    @Test
+    public void SudokuBoard_CompareToNull_BoardsComparisonCorrect() {
+        SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
+        SudokuBoard sudokuTwo = sudokuOne;
+        assertEquals(false, sudokuOne.equals(null));
     }
 
     @Test
