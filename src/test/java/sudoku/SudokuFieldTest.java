@@ -3,6 +3,7 @@ package sudoku;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SudokuFieldTest {
 
@@ -21,7 +22,15 @@ public class SudokuFieldTest {
     @Test void SudokuField_SameObject_HashCodeEquals() {
         SudokuField fieldOne = new SudokuField(5);
         SudokuField fieldTwo = new SudokuField(5);
-        assertEquals(fieldOne.hashCode(), fieldOne.hashCode());
+        assertEquals(fieldOne.hashCode(), fieldTwo.hashCode());
+    }
+
+    @Test void SudokuField_HashCode_EqualsTrue() {
+        SudokuField fieldOne = new SudokuField(5);
+        SudokuField fieldTwo = new SudokuField(5);
+        if (fieldOne.equals(fieldTwo)) {
+            assertTrue(fieldOne.hashCode() == fieldTwo.hashCode());
+        }
     }
 
     @Test void SudokuField_CompareToNull_EqualsFalse() {

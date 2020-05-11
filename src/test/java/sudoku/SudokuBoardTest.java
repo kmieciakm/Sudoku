@@ -39,10 +39,12 @@ public class SudokuBoardTest {
     }
 
     @Test
-    public void SudokuBoard_PassTwoEqualsBoards_HashCodeDiffer() {
+    public void SudokuBoard_PassTwoEqualsBoards_HashCodeEquals() {
         SudokuBoard sudokuOne = new SudokuBoard(new BacktrackingSudokuSolver());
-        SudokuBoard sudokuTwo = new SudokuBoard(new BacktrackingSudokuSolver());
-        assertNotEquals(sudokuTwo.hashCode(), sudokuOne.hashCode());
+        SudokuBoard sudokuTwo = new SudokuBoard();
+        if (sudokuTwo.equals(sudokuOne)) {
+            assertTrue(sudokuOne.hashCode() == sudokuTwo.hashCode());
+        }
     }
 
     @Test

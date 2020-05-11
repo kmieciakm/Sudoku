@@ -1,12 +1,10 @@
 package sudoku;
 
 import org.junit.jupiter.api.Test;
-import solver.BacktrackingSudokuSolver;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SudokuStructureTest {
 
@@ -63,6 +61,15 @@ public class SudokuStructureTest {
         SudokuStructure row = new SudokuStructure();
         SudokuStructure rowExpected = row;
         assertEquals(row.hashCode(), rowExpected.hashCode());
+    }
+
+    @Test
+    public void SudokuStructure_Equals_HashCodeEquals() {
+        SudokuStructure row = new SudokuStructure();
+        SudokuStructure rowExpected = new SudokuStructure();
+        if (row.equals(rowExpected)) {
+            assertTrue(row.hashCode() == rowExpected.hashCode());
+        }
     }
 
     @Test

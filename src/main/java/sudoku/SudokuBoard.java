@@ -81,21 +81,11 @@ public class SudokuBoard {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        if (this == obj) {
-            return true;
-        }
-
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        SudokuBoard objBoard = (SudokuBoard) obj;
-
+        SudokuBoard objBoard = (SudokuBoard) o;
         for (int rowId = 0; rowId < board.length; rowId++) {
             for (int columnId = 0; columnId < board[rowId].length; columnId++) {
                 if (this.get(rowId, columnId) != objBoard.get(rowId, columnId)) {
@@ -103,12 +93,13 @@ public class SudokuBoard {
                 }
             }
         }
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(board);
+        return java.util.Arrays.deepHashCode(board);
     }
 
     @Override

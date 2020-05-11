@@ -1,5 +1,7 @@
 package dao;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import solver.BacktrackingSudokuSolver;
 import sudoku.SudokuBoard;
 import org.junit.jupiter.api.Test;
@@ -10,14 +12,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SudokuBoardDaoTests {
 
-    @Test void SudokuBoardDaoFactory_TryCreateDao_Created() {
-        SudokuBoardDaoFactory factory = new SudokuBoardDaoFactory();
-        assertTrue(factory.getFileDao("C://Temp/sudokuTest.json").getClass() == FileSudokuBoardDao.class);
+    static String tempDir = "Temp";
+
+    @BeforeAll
+    static void Initialize() {
+        boolean file = new File(tempDir).mkdirs();;
+    }
+
+    @Test
+    void SudokuBoardDaoFactory_TryCreateDao_Created() {
+        assertTrue(SudokuBoardDaoFactory.getFileDao(tempDir + "/sudokuTest.json").getClass()
+                == FileSudokuBoardDao.class);
     }
 
     @Test
     public void SudokuBoardDao_WriteToFile_FileCreated() {
-        String filePath = "C://Temp/sudokuTest.json";
+        String filePath = tempDir + "/sudokuTest.json";
         FileSudokuBoardDao dao = new FileSudokuBoardDao(filePath);
         SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
         board.solveGame();
@@ -27,7 +37,7 @@ public class SudokuBoardDaoTests {
 
     @Test
     public void SudokuBoardDao_ReadFromFile_SudokuBoardCreated() {
-        String filePath = "C://Temp/sudokuCreateTest.json";
+        String filePath = tempDir + "/sudokuCreateTest.json";
         FileSudokuBoardDao dao = new FileSudokuBoardDao(filePath);
         SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
 
@@ -39,4 +49,18 @@ public class SudokuBoardDaoTests {
         assertEquals(true, board.equals(boardFromFile));
     }
 
+    @AfterAll
+    static void Finalize() {
+        deleteDirectory(new File(tempDir));
+    }
+
+    static boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
+    }
 }

@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 import solver.BacktrackingSudokuSolver;
 import sudoku.SudokuBoard;
 
-public class FileSudokuBoardDao implements Dao, AutoCloseable {
+public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
 
     public String fileName;
 
@@ -32,8 +32,7 @@ public class FileSudokuBoardDao implements Dao, AutoCloseable {
     }
 
     @Override
-    public void write(Object obj) {
-        SudokuBoard board = (SudokuBoard) obj;
+    public void write(SudokuBoard board) {
         try (FileWriter writer = new FileWriter(this.fileName)) {
             new Gson().toJson(board, writer);
         } catch (IOException e) {
@@ -63,7 +62,7 @@ public class FileSudokuBoardDao implements Dao, AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
 
     }
 }

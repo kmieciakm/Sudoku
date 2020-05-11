@@ -1,7 +1,10 @@
 package dao;
 
+import sudoku.SudokuBoard;
+
 public class SudokuBoardDaoFactory {
-    Dao getFileDao(String fileName) {
+    public static Dao<SudokuBoard> getFileDao(String fileName) {
         return new FileSudokuBoardDao(fileName);
     }
+    private SudokuBoardDaoFactory() {};
 }
