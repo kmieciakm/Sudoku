@@ -1,13 +1,13 @@
 package sudoku;
 
-import com.google.common.base.Objects;
+import java.io.Serializable;
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import solver.SudokuSolver;
 
-public class SudokuBoard {
+public class SudokuBoard implements Serializable {
 
     public static final int sudokuDimension = 9;
     private SudokuField[][] board = new SudokuField[sudokuDimension][sudokuDimension];
@@ -82,9 +82,12 @@ public class SudokuBoard {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SudokuBoard objBoard = (SudokuBoard) o;
         for (int rowId = 0; rowId < board.length; rowId++) {
             for (int columnId = 0; columnId < board[rowId].length; columnId++) {

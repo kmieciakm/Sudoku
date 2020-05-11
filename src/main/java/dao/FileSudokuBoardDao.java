@@ -1,16 +1,14 @@
 package dao;
 
-import com.google.gson.*;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Type;
-import solver.BacktrackingSudokuSolver;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import sudoku.SudokuBoard;
 
 public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
-
     public String fileName;
 
     public FileSudokuBoardDao(String newFilename) {
@@ -19,50 +17,34 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
 
     @Override
     public SudokuBoard read() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(SudokuBoard.class, new SudokuBoardDeserializer())
-                .create();
-        SudokuBoard board = null;
-        try (Reader reader = new FileReader(this.fileName)) {
-            board = gson.fromJson(reader, SudokuBoard.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return board;
-    }
-
-    @Override
-    public void write(SudokuBoard board) {
-        try (FileWriter writer = new FileWriter(this.fileName)) {
-            new Gson().toJson(board, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private class SudokuBoardDeserializer implements JsonDeserializer<SudokuBoard> {
-        @Override
-        public SudokuBoard deserialize(
-                JsonElement json,
-                Type typeOfT,
-                JsonDeserializationContext ctx)
-                throws JsonParseException {
-            SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
-            JsonObject obj = json.getAsJsonObject();
-            for (int i = 0; i < SudokuBoard.sudokuDimension; i++) {
-                for (int j = 0; j < SudokuBoard.sudokuDimension; j++) {
-                    var row = obj.get("board").getAsJsonArray().get(i);
-                    board.set(i, j, row.getAsJsonArray().get(j)
-                            .getAsJsonObject().get("value")
-                            .getAsJsonPrimitive().getAsInt());
-                }
-            }
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            SudokuBoard board = (SudokuBoard) inputStream.readObject();
+            System.out.println(board);
             return board;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void write(SudokuBoard obj) {
+        try (ObjectOutputStream outputStream =
+                new ObjectOutputStream(new FileOutputStream(fileName))) {
+            outputStream.writeObject(obj);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void close() {
+    public void close() throws Exception {
 
     }
 }

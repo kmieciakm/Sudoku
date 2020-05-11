@@ -1,8 +1,9 @@
 package sudoku;
 
 import com.google.common.base.Objects;
+import java.io.Serializable;
 
-public class SudokuField {
+public class SudokuField implements Serializable {
     private int value;
 
     public SudokuField() {
