@@ -59,7 +59,10 @@ public class BacktrackingSudokuSolver implements SudokuSolver, Serializable {
         }
 
         return false;
+    }
 
+    public SudokuSolver getCopy() {
+        return new BacktrackingSudokuSolver();
     }
 }
 

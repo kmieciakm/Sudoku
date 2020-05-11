@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class SudokuStructure implements Serializable {
+public class SudokuStructure implements Serializable, Cloneable {
     private List<SudokuField> values = Arrays.asList(
         new SudokuField[SudokuBoard.sudokuDimension]
     );
@@ -86,5 +86,10 @@ public class SudokuStructure implements Serializable {
                 + "values="
                 + values
                 + '}';
+    }
+
+    @Override
+    protected SudokuStructure clone() {
+        return new SudokuStructure(values);
     }
 }

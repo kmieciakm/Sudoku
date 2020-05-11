@@ -1,6 +1,7 @@
 package sudoku;
 
 import org.junit.jupiter.api.Test;
+import solver.SudokuSolver;
 
 import java.util.Arrays;
 
@@ -140,6 +141,25 @@ public class SudokuStructureTest {
         );
 
         assertEquals(true, column.verify());
+    }
+
+    @Test
+    public void SudokuFiled_Clone_Correct() {
+        SudokuStructure column = new SudokuStructure(Arrays.asList(
+                new SudokuField(1),
+                new SudokuField(2),
+                new SudokuField(3),
+                new SudokuField(4),
+                new SudokuField(5),
+                new SudokuField(6),
+                new SudokuField(7),
+                new SudokuField(8),
+                new SudokuField(9))
+        );
+
+        SudokuStructure clone = column.clone();
+        assertNotSame(column, clone);
+        assertEquals(column, clone);
     }
 
 }

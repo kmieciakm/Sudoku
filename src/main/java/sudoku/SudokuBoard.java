@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import solver.SudokuSolver;
 
-public class SudokuBoard implements Serializable {
+public class SudokuBoard implements Serializable, Cloneable {
 
     public static final int sudokuDimension = 9;
     private SudokuField[][] board = new SudokuField[sudokuDimension][sudokuDimension];
@@ -110,5 +110,16 @@ public class SudokuBoard implements Serializable {
         return "SudokuBoard{"
                 + "board="
                 + Arrays.toString(board);
+    }
+
+    @Override
+    protected SudokuBoard clone() {
+        SudokuBoard newBoard = new SudokuBoard(this.sudokuSolver.getCopy());
+        for (int rowId = 0; rowId < board.length; rowId++) {
+            for (int columnId = 0; columnId < board[rowId].length; columnId++) {
+                newBoard.set(rowId, columnId, this.get(rowId, columnId));
+            }
+        }
+        return newBoard;
     }
 }

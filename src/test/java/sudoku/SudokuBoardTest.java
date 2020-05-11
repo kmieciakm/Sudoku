@@ -3,6 +3,8 @@ package sudoku;
 import solver.BacktrackingSudokuSolver;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SudokuBoardTest {
@@ -77,6 +79,15 @@ public class SudokuBoardTest {
         assertEquals(value, sudokuBoard.get(1,1));
         assertNotEquals(value, sudokuBoard.get(1,2));
         assertNotEquals(value, sudokuBoard.get(2,1));
+    }
+
+    @Test
+    public void SudokuBoard_Clone_Correct() {
+        SudokuBoard sudokuBoard = new SudokuBoard(new BacktrackingSudokuSolver());
+        sudokuBoard.solveGame();
+        SudokuBoard clone = sudokuBoard.clone();
+        assertNotSame(sudokuBoard, clone);
+        assertEquals(sudokuBoard, clone);
     }
 
 }

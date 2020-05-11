@@ -3,7 +3,7 @@ package sudoku;
 import com.google.common.base.Objects;
 import java.io.Serializable;
 
-public class SudokuField implements Serializable {
+public class SudokuField implements Serializable, Comparable<SudokuField>, Cloneable {
     private int value;
 
     public SudokuField() {
@@ -45,5 +45,21 @@ public class SudokuField implements Serializable {
                 + "value="
                 + value
                 + '}';
+    }
+
+    @Override
+    public int compareTo(SudokuField sudokuField) {
+        if (value > sudokuField.value) {
+            return 1;
+        } else if (value == sudokuField.value) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    protected SudokuField clone() {
+        return new SudokuField(value);
     }
 }
