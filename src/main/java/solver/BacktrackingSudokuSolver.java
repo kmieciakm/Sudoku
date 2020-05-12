@@ -15,6 +15,8 @@ public class BacktrackingSudokuSolver implements SudokuSolver, Serializable {
     private boolean fillBoard(SudokuBoard board) {
         int emptyFiledX = -1;
         int emptyFiledY = -1;
+        int previousX = 0;
+        int previousY = 0;
         boolean isEmpty = true;
 
         outerloop:
@@ -26,6 +28,8 @@ public class BacktrackingSudokuSolver implements SudokuSolver, Serializable {
                     isEmpty = false;
                     break outerloop;
                 }
+                previousX = x;
+                previousY = y;
             }
         }
 
@@ -55,6 +59,9 @@ public class BacktrackingSudokuSolver implements SudokuSolver, Serializable {
                 }
             } else {
                 board.set(emptyFiledX, emptyFiledY, 0);
+                if (numberIndex == SudokuBoard.sudokuDimension - 1) {
+                    board.set(previousX, previousY, 0);
+                }
             }
         }
 
