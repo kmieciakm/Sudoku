@@ -2,8 +2,12 @@ package ui;
 
 import dao.FileSudokuBoardDao;
 import java.io.FileNotFoundException;
+import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,15 +20,23 @@ public class SudokuController {
 
     SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
     String savingPath = System.getProperty("user.dir") + "/sudoku.bin";
+    ResourceBundle langBundle = ResourceBundle.getBundle("Lang");
+    ResourceBundle authorsBundle = ResourceBundle.getBundle("Authors");
 
-    @FXML
-    private Label massage;
+    @FXML private Label message;
+    @FXML private Label authors;
+    @FXML private Label difficultyLabel;
 
-    @FXML
-    private GridPane grid;
+    @FXML private GridPane grid;
 
-    @FXML
-    private ChoiceBox<DifficultyLevels> difficultyBox;
+    @FXML private ChoiceBox<DifficultyLevels> difficultyBox;
+    @FXML private ChoiceBox<Languages> languageBox;
+
+    @FXML private Button checkBtn;
+    @FXML private Button solveBtn;
+    @FXML private Button loadBtn;
+    @FXML private Button saveBtn;
+    @FXML private Button startBtn;
 
     @FXML
     public void initialize() {
@@ -32,19 +44,57 @@ public class SudokuController {
         difficultyBox.getItems().setAll(DifficultyLevels.values());
         difficultyBox.getSelectionModel().selectFirst();
 
-        massage.setText("");
+        // add language choice box
+        languageBox.getItems().setAll(Languages.values());
+        languageBox.getSelectionModel().selectFirst();
+        languageBox.getSelectionModel().selectedIndexProperty()
+                .addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue,
+                                Number number, Number number2) {
+                Languages chosenLanguage = languageBox.getItems().get((Integer) number2);
+                switchLanguage(chosenLanguage);
+            }
+        });
+        populateTextFields();
+
+        message.setText("");
 
         bindToGrid(board);
+    }
+
+    private void switchLanguage(Languages lang) {
+        switch (lang) {
+            case PL: {
+                langBundle = ResourceBundle.getBundle("Lang_pl");
+                break;
+            }
+            default: {
+                langBundle = ResourceBundle.getBundle("Lang");
+            }
+        }
+        populateTextFields();
+    }
+
+    private void populateTextFields() {
+        message.setText(langBundle.getString("action"));
+        checkBtn.setText(langBundle.getString("checkBtn"));
+        solveBtn.setText(langBundle.getString("solveBtn"));
+        saveBtn.setText(langBundle.getString("saveBtn"));
+        loadBtn.setText(langBundle.getString("loadBtn"));
+        startBtn.setText(langBundle.getString("startBtn"));
+        difficultyLabel.setText(langBundle.getString("level"));
+        authors.setText(langBundle.getString("authors") + ": " + authorsBundle.getString("names"));
     }
 
     @FXML
     public void checkCorrectness() {
         if (board.checkBoard()) {
-            massage.setText("Correct");
-            massage.setTextFill(Color.GREEN);
+            message.setText(langBundle.getString("message_correct"));
+            message.setTextFill(Color.GREEN);
         } else {
-            massage.setText("Wrong");
-            massage.setTextFill(Color.RED);
+            message.setText(langBundle.getString("message_wrong"));
+            message.setTextFill(Color.RED);
         }
     }
 
@@ -102,11 +152,11 @@ public class SudokuController {
         try {
             FileSudokuBoardDao dao = new FileSudokuBoardDao(savingPath);
             dao.write(board);
-            massage.setText("Saved");
-            massage.setTextFill(Color.GREEN);
+            message.setText(langBundle.getString("message_save"));
+            message.setTextFill(Color.GREEN);
         } catch (Exception e) {
-            massage.setText("Sorry something went wrong");
-            massage.setTextFill(Color.RED);
+            message.setText(langBundle.getString("message_error"));
+            message.setTextFill(Color.RED);
         }
     }
 
@@ -117,14 +167,14 @@ public class SudokuController {
             board = dao.read();
             bindToGrid(board);
             drawSudoku();
-            massage.setText("Loaded");
-            massage.setTextFill(Color.GREEN);
+            message.setText(langBundle.getString("message_load"));
+            message.setTextFill(Color.GREEN);
         } catch (FileNotFoundException e) {
-            massage.setText("No saved board");
-            massage.setTextFill(Color.BLACK);
+            message.setText(langBundle.getString("message_emptySave"));
+            message.setTextFill(Color.RED);
         } catch (Exception e) {
-            massage.setText("Sorry something went wrong");
-            massage.setTextFill(Color.RED);
+            message.setText(langBundle.getString("message_error"));
+            message.setTextFill(Color.RED);
         }
     }
 
