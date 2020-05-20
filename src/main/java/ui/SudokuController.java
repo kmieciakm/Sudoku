@@ -1,5 +1,7 @@
 package ui;
 
+import dao.FileSudokuBoardDao;
+import java.io.FileNotFoundException;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
@@ -13,6 +15,7 @@ import sudoku.SudokuBoard;
 public class SudokuController {
 
     SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
+    String savingPath = System.getProperty("user.dir") + "/sudoku.bin";
 
     @FXML
     private Label massage;
@@ -53,7 +56,6 @@ public class SudokuController {
 
     @FXML
     public void startGame() {
-        board = new SudokuBoard(new BacktrackingSudokuSolver());
         board.solveGame();
         DifficultyLevels level = difficultyBox.getSelectionModel().getSelectedItem();
         BoardGenarator.generateBoard(board, level);
@@ -93,6 +95,37 @@ public class SudokuController {
             }
         }
         return null;
+    }
+
+    @FXML
+    public void saveBoard() {
+        try {
+            FileSudokuBoardDao dao = new FileSudokuBoardDao(savingPath);
+            dao.write(board);
+            massage.setText("Saved");
+            massage.setTextFill(Color.GREEN);
+        } catch (Exception e) {
+            massage.setText("Sorry something went wrong");
+            massage.setTextFill(Color.RED);
+        }
+    }
+
+    @FXML
+    public void loadBoard() {
+        try {
+            FileSudokuBoardDao dao = new FileSudokuBoardDao(savingPath);
+            board = dao.read();
+            bindToGrid(board);
+            drawSudoku();
+            massage.setText("Loaded");
+            massage.setTextFill(Color.GREEN);
+        } catch (FileNotFoundException e) {
+            massage.setText("No saved board");
+            massage.setTextFill(Color.BLACK);
+        } catch (Exception e) {
+            massage.setText("Sorry something went wrong");
+            massage.setTextFill(Color.RED);
+        }
     }
 
 }

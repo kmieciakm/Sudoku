@@ -2,8 +2,8 @@ package solver;
 
 import sudoku.SudokuBoard;
 
-public interface SudokuSolver {
+public interface SudokuSolver extends Cloneable {
     void solve(SudokuBoard board);
 
-    SudokuSolver getCopy();
+    SudokuSolver clone();
 }

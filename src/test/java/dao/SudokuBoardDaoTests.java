@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import solver.BacktrackingSudokuSolver;
 import sudoku.SudokuBoard;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +36,11 @@ public class SudokuBoardDaoTests {
         JsonSudokuBoardDao dao = new JsonSudokuBoardDao(filePath);
         SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
         board.solveGame();
-        dao.write(board);
+        try {
+            dao.write(board);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertEquals(true, new File(filePath).isFile());
     }
 
@@ -48,9 +51,18 @@ public class SudokuBoardDaoTests {
         SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
 
         board.solveGame();
-        dao.write(board);
+        try {
+            dao.write(board);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        SudokuBoard boardFromFile = dao.read();
+        SudokuBoard boardFromFile = null;
+        try {
+            boardFromFile = dao.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertEquals(true, board.equals(boardFromFile));
     }
@@ -61,7 +73,13 @@ public class SudokuBoardDaoTests {
         FileSudokuBoardDao dao = new FileSudokuBoardDao(filePath);
         SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
         board.solveGame();
-        dao.write(board);
+
+        try {
+            dao.write(board);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         assertEquals(true, new File(filePath).isFile());
     }
 
@@ -72,9 +90,18 @@ public class SudokuBoardDaoTests {
         SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
 
         board.solveGame();
-        dao.write(board);
+        try {
+            dao.write(board);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        SudokuBoard boardFromFile = dao.read();
+        SudokuBoard boardFromFile = null;
+        try {
+            boardFromFile = dao.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertEquals(true, board.equals(boardFromFile));
     }

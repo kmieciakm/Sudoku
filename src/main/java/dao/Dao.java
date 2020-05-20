@@ -1,7 +1,9 @@
 package dao;
 
-public interface Dao<T> {
-    T read();
+import java.io.IOException;
 
-    void write(T obj);
+public interface Dao<T> {
+    T read() throws IOException, ClassNotFoundException;
+
+    void write(T obj) throws IOException;
 }

@@ -24,25 +24,21 @@ public class JsonSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
     }
 
     @Override
-    public SudokuBoard read() {
+    public SudokuBoard read() throws IOException {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(SudokuBoard.class, new SudokuBoardDeserializer())
                 .create();
         SudokuBoard board = null;
         try (Reader reader = new FileReader(this.fileName)) {
             board = gson.fromJson(reader, SudokuBoard.class);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return board;
     }
 
     @Override
-    public void write(SudokuBoard board) {
+    public void write(SudokuBoard board) throws IOException {
         try (FileWriter writer = new FileWriter(this.fileName)) {
             new Gson().toJson(board, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

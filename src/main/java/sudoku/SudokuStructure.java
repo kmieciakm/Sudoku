@@ -2,6 +2,7 @@ package sudoku;
 
 import com.google.common.base.Objects;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -90,6 +91,10 @@ public class SudokuStructure implements Serializable, Cloneable {
 
     @Override
     protected SudokuStructure clone() {
-        return new SudokuStructure(values);
+        var valuesCopy = new ArrayList<SudokuField>();
+        for (var value : values) {
+            valuesCopy.add(value.clone());
+        }
+        return new SudokuStructure(valuesCopy);
     }
 }
