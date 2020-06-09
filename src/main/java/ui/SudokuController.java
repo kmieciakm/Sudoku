@@ -2,15 +2,19 @@ package ui;
 
 import dao.FileSudokuBoardDao;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import solver.BacktrackingSudokuSolver;
@@ -23,6 +27,8 @@ public class SudokuController {
     ResourceBundle langBundle = ResourceBundle.getBundle("Lang");
     ResourceBundle authorsBundle = ResourceBundle.getBundle("Authors");
 
+    @FXML private AnchorPane rootPane;
+
     @FXML private Label message;
     @FXML private Label authors;
     @FXML private Label difficultyLabel;
@@ -31,6 +37,7 @@ public class SudokuController {
 
     @FXML private ChoiceBox<DifficultyLevels> difficultyBox;
     @FXML private ChoiceBox<Languages> languageBox;
+    private Languages currentLang;
 
     @FXML private Button checkBtn;
     @FXML private Button solveBtn;
@@ -46,19 +53,19 @@ public class SudokuController {
 
         // add language choice box
         languageBox.getItems().setAll(Languages.values());
-        languageBox.getSelectionModel().selectFirst();
+
         languageBox.getSelectionModel().selectedIndexProperty()
                 .addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue,
                                 Number number, Number number2) {
-                Languages chosenLanguage = languageBox.getItems().get((Integer) number2);
-                switchLanguage(chosenLanguage);
+                currentLang = languageBox.getItems().get((Integer) number2);
+                switchLanguage(currentLang);
             }
         });
-        populateTextFields();
-
+        // populateTextFields();
         message.setText("");
+        authors.setText(authorsBundle.getString("names"));
 
         bindToGrid(board);
     }
@@ -66,25 +73,29 @@ public class SudokuController {
     private void switchLanguage(Languages lang) {
         switch (lang) {
             case PL: {
-                langBundle = ResourceBundle.getBundle("Lang_pl");
+                langBundle = ResourceBundle.getBundle("Lang", new Locale("pl"));
                 break;
             }
             default: {
-                langBundle = ResourceBundle.getBundle("Lang");
+                langBundle = ResourceBundle.getBundle("Lang", new Locale("en"));
             }
         }
-        populateTextFields();
+
+        try {
+            reload();
+        } catch (IOException e) {
+            message.setText(langBundle.getString("message_error"));
+        }
+        // populateTextFields();
     }
 
     private void populateTextFields() {
-        message.setText(langBundle.getString("action"));
         checkBtn.setText(langBundle.getString("checkBtn"));
         solveBtn.setText(langBundle.getString("solveBtn"));
         saveBtn.setText(langBundle.getString("saveBtn"));
         loadBtn.setText(langBundle.getString("loadBtn"));
         startBtn.setText(langBundle.getString("startBtn"));
         difficultyLabel.setText(langBundle.getString("level"));
-        authors.setText(langBundle.getString("authors") + ": " + authorsBundle.getString("names"));
     }
 
     @FXML
@@ -96,6 +107,11 @@ public class SudokuController {
             message.setText(langBundle.getString("message_wrong"));
             message.setTextFill(Color.RED);
         }
+    }
+
+    private void reload() throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/Sudoku.fxml"), langBundle);
+        rootPane.getChildren().setAll(pane);
     }
 
     @FXML
