@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.SudokuController">
    <children>
@@ -35,9 +36,41 @@
       <Label fx:id="message" alignment="CENTER" layoutX="214.0" layoutY="14.0" prefHeight="17.0" prefWidth="173.0" />
       <Button fx:id="checkBtn" layoutX="498.0" layoutY="354.0" mnemonicParsing="false" onMouseClicked="#checkCorrectness" text="%checkBtn" />
       <Button fx:id="solveBtn" layoutX="500.0" layoutY="321.0" mnemonicParsing="false" onMouseClicked="#solveGame" text="%solveBtn" />
-      <Button fx:id="saveBtn" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#saveBoard" text="%solveBtn" />
-      <Button fx:id="loadBtn" layoutX="75.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#loadBoard" text="%loadBtn" />
-      <Label fx:id="authors" layoutX="12.0" layoutY="371.0" prefHeight="17.0" prefWidth="283.0" text="%authors" />
+      <Button fx:id="saveBtn" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#showSaveBox" text="%saveBtn" />
+      <Button fx:id="loadBtn" layoutX="75.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#showLoadBox" text="%loadBtn" />
+      <Label fx:id="authors" layoutX="14.0" layoutY="375.0" prefHeight="17.0" prefWidth="283.0" text="%authors" />
       <ChoiceBox fx:id="languageBox" layoutX="529.0" layoutY="10.0" prefHeight="25.0" prefWidth="61.0" />
+      <Pane fx:id="saveBox" layoutX="7.0" layoutY="6.0" prefHeight="386.0" prefWidth="586.0" style="-fx-background-color: #333333;" visible="false">
+         <children>
+            <Button fx:id="closeSaveBtn" layoutX="515.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#hideSaveBox" text="%closeBtn" />
+            <Button fx:id="saveSlot5" layoutX="201.0" layoutY="243.0" mnemonicParsing="false" onAction="#saveGame" prefHeight="25.0" prefWidth="173.0" text="%slot5" userData="5" />
+            <Button fx:id="saveSlot4" layoutX="201.0" layoutY="218.0" mnemonicParsing="false" onAction="#saveGame" prefHeight="25.0" prefWidth="173.0" text="%slot4" userData="4" />
+            <Button fx:id="saveSlot3" layoutX="201.0" layoutY="193.0" mnemonicParsing="false" onAction="#saveGame" prefHeight="25.0" prefWidth="173.0" text="%slot3" userData="3" />
+            <Button fx:id="saveSlot2" layoutX="201.0" layoutY="168.0" mnemonicParsing="false" onAction="#saveGame" prefHeight="25.0" prefWidth="173.0" text="%slot2" userData="2" />
+            <Button fx:id="saveSlot1" layoutX="201.0" layoutY="143.0" mnemonicParsing="false" onAction="#saveGame" prefHeight="25.0" prefWidth="173.0" text="%slot1" userData="1" />
+            <Label layoutX="201.0" layoutY="107.0" prefHeight="17.0" prefWidth="173.0" text="%saveSlotsTitle" textAlignment="CENTER" textFill="WHITE" />
+            <Label layoutX="207.0" layoutY="22.0" prefHeight="17.0" prefWidth="173.0" text="%saveTitle" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+       <Pane fx:id="loadBox" layoutX="7.0" layoutY="6.0" prefHeight="386.0" prefWidth="586.0" style="-fx-background-color: #333333;" visible="false">
+           <children>
+               <Button fx:id="closeLoadBtn" layoutX="515.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#hideLoadBox" text="%closeBtn" />
+               <Button fx:id="loadSlot5" layoutX="201.0" layoutY="243.0" mnemonicParsing="false" onAction="#loadGame" prefHeight="25.0" prefWidth="173.0" text="%slot5" userData="5" />
+               <Button fx:id="loadSlot4" layoutX="201.0" layoutY="218.0" mnemonicParsing="false" onAction="#loadGame" prefHeight="25.0" prefWidth="173.0" text="%slot4" userData="4" />
+               <Button fx:id="loadSlot3" layoutX="201.0" layoutY="193.0" mnemonicParsing="false" onAction="#loadGame" prefHeight="25.0" prefWidth="173.0" text="%slot3" userData="3" />
+               <Button fx:id="loadSlot2" layoutX="201.0" layoutY="168.0" mnemonicParsing="false" onAction="#loadGame" prefHeight="25.0" prefWidth="173.0" text="%slot2" userData="2" />
+               <Button fx:id="loadSlot1" layoutX="201.0" layoutY="143.0" mnemonicParsing="false" onAction="#loadGame" prefHeight="25.0" prefWidth="173.0" text="%slot1" userData="1" />
+               <Label layoutX="201.0" layoutY="107.0" prefHeight="17.0" prefWidth="173.0" text="%saveSlotsTitle" textAlignment="CENTER" textFill="WHITE" />
+               <Label layoutX="207.0" layoutY="22.0" prefHeight="17.0" prefWidth="173.0" text="%loadTitle" textAlignment="CENTER" textFill="WHITE">
+                   <font>
+                       <Font size="23.0" />
+                   </font>
+               </Label>
+           </children>
+       </Pane>
    </children>
 </AnchorPane>

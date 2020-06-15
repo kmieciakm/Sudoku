@@ -16,6 +16,7 @@
 
 # Custom
 target/**
+*.bin
 
 # Generated files
 .idea/**/contentModel.xml

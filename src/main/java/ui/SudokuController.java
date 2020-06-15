@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -16,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import solver.BacktrackingSudokuSolver;
 import sudoku.SudokuBoard;
@@ -23,7 +25,7 @@ import sudoku.SudokuBoard;
 public class SudokuController {
 
     SudokuBoard board = new SudokuBoard(new BacktrackingSudokuSolver());
-    String savingPath = System.getProperty("user.dir") + "/sudoku.bin";
+    String savingPath = System.getProperty("user.dir");
     ResourceBundle langBundle = ResourceBundle.getBundle("Lang");
     ResourceBundle authorsBundle = ResourceBundle.getBundle("Authors");
 
@@ -34,6 +36,8 @@ public class SudokuController {
     @FXML private Label difficultyLabel;
 
     @FXML private GridPane grid;
+    @FXML private Pane saveBox;
+    @FXML private Pane loadBox;
 
     @FXML private ChoiceBox<DifficultyLevels> difficultyBox;
     @FXML private ChoiceBox<Languages> languageBox;
@@ -164,9 +168,26 @@ public class SudokuController {
     }
 
     @FXML
-    public void saveBoard() {
+    public void saveGame(ActionEvent event) {
+        Node node = (Node) event.getSource() ;
+        String filename = (String) node.getUserData();
+
+        saveTo(savingPath + "/sudoku-" + filename + ".bin");
+        hideSaveBox();
+    }
+
+    @FXML
+    public void loadGame(ActionEvent event) {
+        Node node = (Node) event.getSource() ;
+        String filename = (String) node.getUserData();
+
+        loadFrom(savingPath + "/sudoku-" + filename + ".bin");
+        hideLoadBox();
+    }
+
+    private void saveTo(String filepath) {
         try {
-            FileSudokuBoardDao dao = new FileSudokuBoardDao(savingPath);
+            FileSudokuBoardDao dao = new FileSudokuBoardDao(filepath);
             dao.write(board);
             message.setText(langBundle.getString("message_save"));
             message.setTextFill(Color.GREEN);
@@ -176,10 +197,9 @@ public class SudokuController {
         }
     }
 
-    @FXML
-    public void loadBoard() {
+    private void loadFrom(String filepath) {
         try {
-            FileSudokuBoardDao dao = new FileSudokuBoardDao(savingPath);
+            FileSudokuBoardDao dao = new FileSudokuBoardDao(filepath);
             board = dao.read();
             bindToGrid(board);
             drawSudoku();
@@ -192,6 +212,26 @@ public class SudokuController {
             message.setText(langBundle.getString("message_error"));
             message.setTextFill(Color.RED);
         }
+    }
+
+    @FXML
+    public void showSaveBox() {
+        saveBox.setVisible(true);
+    }
+
+    @FXML
+    public void showLoadBox() {
+        loadBox.setVisible(true);
+    }
+
+    @FXML
+    public void hideSaveBox() {
+        saveBox.setVisible(false);
+    }
+
+    @FXML
+    public void hideLoadBox() {
+        loadBox.setVisible(false);
     }
 
 }
